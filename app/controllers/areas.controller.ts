@@ -1,4 +1,4 @@
-import { Post, JsonController, Body, Get, Res, Param, Delete, Controller } from 'routing-controllers';
+import { Post, JsonController, Body, Get, Res, Param, Delete } from 'routing-controllers';
 import { AreaService } from '../services/area.service';
 import { AreaDto } from '../dto/area.dto';
 import { Area } from '../entities/area.entity';
@@ -10,24 +10,24 @@ export class AreaController {
     constructor(private readonly areaService: AreaService) {}
 
     @Post()
-    async create(@Body() sectorDto: AreaDto, @Res() res: Response) {
-        const response = await this.areaService.create(sectorDto);
+    async create(@Body() areaDto: AreaDto, @Res() res: Response) {
+        console.log("Received POST request for create a new area");
+        const response = await this.areaService.create(areaDto);
+        console.log(response);
         return res.send(response);
-    }
-
-    @Get()
-    async getAll(): Promise<Area[]> {
-        return await this.areaService.getAll();
     }
 
     @Get('/:id')
     async getOneByName(@Param('id') id: number): Promise<Area> {
+        console.log("Received GET request to view the root with children and related devices");
         return await this.areaService.getOneById(id);
     }
 
     @Delete('/:id')
     async delete(@Param('id') id: number, @Res() res: Response) {
+        console.log("Received DELETE request to eliminate an area and cascade all the associated children");
         const response = await this.areaService.delete(id);
+        console.log(response);
         return res.send(response);
     }
 }
