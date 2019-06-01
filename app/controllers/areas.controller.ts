@@ -1,19 +1,18 @@
 import { Post, JsonController, Body, Get, Res, Param, Delete } from 'routing-controllers';
-import { AreaService } from '../services/area.service';
+import { AreasService } from '../services/areas.service';
 import { AreaDto } from '../dto/area.dto';
 import { Area } from '../entities/area.entity';
 import { Response } from 'express'
 
 
 @JsonController('/areas')
-export class AreaController {
-    constructor(private readonly areaService: AreaService) {}
+export class AreasController {
+    constructor(private readonly areaService: AreasService) {}
 
     @Post()
     async create(@Body() areaDto: AreaDto, @Res() res: Response) {
         console.log("Received POST request for create a new area");
         const response = await this.areaService.create(areaDto);
-        console.log(response);
         return res.send(response);
     }
 
@@ -27,7 +26,6 @@ export class AreaController {
     async delete(@Param('id') id: number, @Res() res: Response) {
         console.log("Received DELETE request to eliminate an area and cascade all the associated children");
         const response = await this.areaService.delete(id);
-        console.log(response);
         return res.send(response);
     }
 }
