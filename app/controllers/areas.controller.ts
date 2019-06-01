@@ -1,13 +1,13 @@
 import { Post, JsonController, Body, Get, Res, Param, Delete } from 'routing-controllers';
-import { AreaService } from '../services/area.service';
+import { AreasService } from '../services/areas.service';
 import { AreaDto } from '../dto/area.dto';
 import { Area } from '../entities/area.entity';
 import { Response } from 'express'
 
 
 @JsonController('/areas')
-export class AreaController {
-    constructor(private readonly areaService: AreaService) {}
+export class AreasController {
+    constructor(private readonly areaService: AreasService) {}
 
     @Post()
     async create(@Body() areaDto: AreaDto, @Res() res: Response) {

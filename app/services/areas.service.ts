@@ -1,14 +1,14 @@
 import { Service } from 'typedi';
 import { InjectRepository } from 'typeorm-typedi-extensions';
-import { AreaRepository } from '../repositories/area.repository';
+import { AreasRepository } from '../repositories/areas.repository';
 import { Area } from '../entities/area.entity';
 import { AreaDto } from '../dto/area.dto';
 
 Service()
-export class AreaService {
+export class AreasService {
     constructor(
         @InjectRepository()
-        private readonly areaRepository: AreaRepository,
+        private readonly areaRepository: AreasRepository,
     ) {}
 
     async create(areaDto: AreaDto){
