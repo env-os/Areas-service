@@ -3,6 +3,7 @@ import { useContainer as typeormUseContainer, createConnection } from 'typeorm';
 import { Container } from 'typedi';
 import { createExpressServer, useContainer as routingUseContainer } from 'routing-controllers';
 import { AreasController } from './controllers/areas.controller';
+import { DevicesController } from './controllers/devices.controller';
 
 
 typeormUseContainer(Container)
@@ -11,7 +12,10 @@ routingUseContainer(Container)
 const port = process.env.PORT || 3000;
 
 const app = createExpressServer({
-    controllers: [AreasController],
+    controllers: [
+        AreasController,
+        DevicesController,
+    ],
     classTransformer: true,
     validation: true
 });

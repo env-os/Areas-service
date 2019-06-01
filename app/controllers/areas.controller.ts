@@ -13,7 +13,6 @@ export class AreasController {
     async create(@Body() areaDto: AreaDto, @Res() res: Response) {
         console.log("Received POST request for create a new area");
         const response = await this.areaService.create(areaDto);
-        console.log(response);
         return res.send(response);
     }
 
@@ -27,7 +26,6 @@ export class AreasController {
     async delete(@Param('id') id: number, @Res() res: Response) {
         console.log("Received DELETE request to eliminate an area and cascade all the associated children");
         const response = await this.areaService.delete(id);
-        console.log(response);
         return res.send(response);
     }
 }

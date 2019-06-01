@@ -6,7 +6,7 @@ export class Device {
     @PrimaryGeneratedColumn()
     public id!: number;
 
-    @ManyToOne(type => Area, areas => areas.devices)
+    @ManyToOne(type => Area, areas => areas.devices, {nullable: false, onDelete: "CASCADE"})
     area: Area;
 
     constructor(area: Area){
