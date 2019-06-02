@@ -11,17 +11,17 @@ export class DevicesService {
         private readonly devicesRepository: DevicesRepository,
     ) {}
 
-    async create(deviceDto: DeviceDto) {
-        const device = new Device(deviceDto.area);
+    async createDevice(deviceDto: DeviceDto) {
+        const device = new Device(deviceDto.slug, deviceDto.area);
         await this.devicesRepository.save(device);
     }
 
-    async delete(id: number) {
-        await this.devicesRepository.delete(id);
+    async deleteDevice(slug: string) {
+        await this.devicesRepository.delete({ slug: slug });
     }
 
-    async getOneById(id: number): Promise<Device> {
-        return await this.devicesRepository.getOneById(id);
+    async getDevice(slug: string): Promise<Device> {
+        return await this.devicesRepository.getOneBySlug(slug);
     }
 
 }
