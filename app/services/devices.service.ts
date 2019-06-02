@@ -20,7 +20,7 @@ export class DevicesService {
         await this.devicesRepository.delete({ slug: slug });
     }
 
-    async getDevice(slug: string): Promise<Device> {
+    async getDeviceBySlug(slug: string): Promise<Device> {
         return await this.devicesRepository.getOneBySlug(slug);
     }
 

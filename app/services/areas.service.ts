@@ -23,7 +23,7 @@ export class AreasService {
         await this.areasRepository.save(area);
     }
 
-    public async getArea(slug: string): Promise<Area> {
+    public async getAreaBySlug(slug: string): Promise<Area> {
         return await this.areasRepository.getOneBySlug(slug);
     }
 
