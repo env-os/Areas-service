@@ -3,15 +3,16 @@ import { InjectRepository } from 'typeorm-typedi-extensions';
 import { AreasRepository } from '../repositories/areas.repository';
 import { Area } from '../entities/area.entity';
 import { AreaDto } from '../dto/area.dto';
+import { Device } from '../entities/device.entity';
 
 Service()
 export class AreasService {
     constructor(
         @InjectRepository()
-        private readonly areaRepository: AreasRepository,
+        private readonly areasRepository: AreasRepository,
     ) {}
 
-    async create(areaDto: AreaDto){
+    public async createArea(areaDto: AreaDto){
         const area = new Area(
             areaDto.name,
             areaDto.description,
@@ -19,19 +20,30 @@ export class AreasService {
             areaDto.childrens,
             areaDto.devices
         )
-        await this.areaRepository.save(area);
+        await this.areasRepository.save(area);
     }
 
-    public async getAll(): Promise<Area[]> {
-        return await this.areaRepository.find()
+    public async getArea(slug: string): Promise<Area> {
+        return await this.areasRepository.getOneBySlug(slug);
     }
 
-    public async getOneById(id:number): Promise<Area> {
-        return await this.areaRepository.getOneById(id);
+    public async getDevicesOfArea(areaSlug: string): Promise<Device[]> {
+        const area = await this.areasRepository.getOneBySlug(areaSlug);
+        return await area.devices;
     }
 
-    public async delete(id: number) {
-        await this.areaRepository.delete({id});
+    public async getParentOfArea(areaSlug: string): Promise<Area> {
+        const area = await this.areasRepository.getOneBySlug(areaSlug);
+        return await area.parent;
+    }
+
+    public async getChildrensOfArea(areaSlug: string): Promise<Area[]> {
+        const area = await this.areasRepository.getOneBySlug(areaSlug);
+        return await area.childrens;
+    }
+
+    public async deleteArea(areaSlug: string) {
+        await this.areasRepository.delete({slug: areaSlug});
     }
 
 }

@@ -3,29 +3,48 @@ import { AreasService } from '../services/areas.service';
 import { AreaDto } from '../dto/area.dto';
 import { Area } from '../entities/area.entity';
 import { Response } from 'express'
+import { Device } from '../entities/device.entity';
 
 
 @JsonController('/areas')
 export class AreasController {
-    constructor(private readonly areaService: AreasService) {}
+    constructor(private readonly areasService: AreasService) {}
 
     @Post()
-    async create(@Body() areaDto: AreaDto, @Res() res: Response) {
-        console.log("Received POST request for create a new area");
-        const response = await this.areaService.create(areaDto);
+    async createArea(@Body() areaDto: AreaDto, @Res() res: Response) {
+        console.log("Received POST request at /areas endpoint.");
+        const response = await this.areasService.createArea(areaDto);
         return res.send(response);
     }
 
-    @Get('/:id')
-    async getOneByName(@Param('id') id: number): Promise<Area> {
-        console.log("Received GET request to view the root with children and related devices");
-        return await this.areaService.getOneById(id);
+    @Get('/:slug')
+    async getAreaByslug(@Param('slug') slug: string): Promise<Area> {
+        console.log("Received GET request at /areas/:slug endpoint.");
+        return await this.areasService.getArea(slug);
     }
 
-    @Delete('/:id')
-    async delete(@Param('id') id: number, @Res() res: Response) {
-        console.log("Received DELETE request to eliminate an area and cascade all the associated children");
-        const response = await this.areaService.delete(id);
+    @Get('/:slug/devices')
+    async getDevicesOfArea(@Param('slug') slug: string): Promise<Device[]> {
+        console.log("Received GET request at /areas/:slug/devices endpoint.");
+        return await this.areasService.getDevicesOfArea(slug);
+    }
+
+    @Get('/:slug/parent')
+    async getParentOfArea(@Param('slug') slug: string): Promise<Area> {
+        console.log("Received GET request at /areas/:slug/parent endpoint.");
+        return await this.areasService.getParentOfArea(slug);
+    }
+
+    @Get('/:slug/childrens')
+    async getChildrensOfArea(@Param('slug') slug: string): Promise<Area[]> {
+        console.log("Received GET request at /areas/:slug/childrens endpoint.");
+        return await this.areasService.getChildrensOfArea(slug);
+    }
+
+    @Delete('/:slug')
+    async deleteArea(@Param('slug') slug: string, @Res() res: Response) {
+        console.log("Received DELETE request at /areas/:slug endpoint.");
+        const response = await this.areasService.deleteArea(slug);
         return res.send(response);
     }
 }

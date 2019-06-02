@@ -4,9 +4,9 @@ import { Area } from "../entities/area.entity";
 @EntityRepository(Area)
 export class AreasRepository extends Repository<Area> {
     
-    async getOneById(id: number): Promise<Area> {
+    async getOneBySlug(slug: string): Promise<Area> {
         return await this.findOneOrFail({
-            where: {id: id},
+            where: {slug: slug},
             join: {
                 alias: "area",
                 leftJoinAndSelect: {
