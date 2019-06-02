@@ -13,13 +13,13 @@ export class Area {
     @Column({ type: 'varchar', length: 150, unique: true})
     public slug: string;
 
-    @Column({ type: 'varchar', length: 150 })
+    @Column({ type: 'varchar', length: 150, nullable: true })
     public description: string;
 
-    @ManyToOne(type => Area, sector => sector.childrens, { onDelete: 'CASCADE' })
+    @ManyToOne(type => Area, area => area.childrens, { onDelete: 'CASCADE' })
     parent: Area;
 
-    @OneToMany(type => Area, sector => sector.parent, { onDelete: 'CASCADE' })
+    @OneToMany(type => Area, area => area.parent, { onDelete: 'CASCADE' })
     childrens: Area[];
 
     @OneToMany(type => Device, device => device.area)
