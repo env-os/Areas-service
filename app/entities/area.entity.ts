@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm";
-import  slug  from 'slug'
+import  slugifly  from 'slugify'
 import { Device } from "./device.entity";
 
 @Entity("Areas")
@@ -27,7 +27,7 @@ export class Area {
 
     constructor(name: string, description: string, parent: Area, childrens: Area[], devices: Device[]){
         this.name = name;
-        this.slug = slug(this.name);
+        this.slug = slugifly(String(this.name), { lower: true });
         this.description = description;
         this.parent = parent;
         this.childrens = childrens;
