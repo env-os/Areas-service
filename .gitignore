@@ -1,5 +1,6 @@
 build
 .directory
+ormconfig.json
 
 # Logs
 logs
