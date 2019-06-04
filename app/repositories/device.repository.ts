@@ -2,7 +2,7 @@ import { EntityRepository, AbstractRepository } from "typeorm";
 import { Device } from "../entities/device.entity";
 
 @EntityRepository(Device)
-export class DevicesRepository extends AbstractRepository<Device> {
+export class DeviceRepository extends AbstractRepository<Device> {
 
     public async create(device: Device): Promise<void> {
         await this.repository.save(device);
