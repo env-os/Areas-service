@@ -1,10 +1,8 @@
-import { Area } from '../entities/area.entity';
 import { Device } from '../entities/device.entity';
 
-export class AreaDto {
-  readonly name!: string;
-  readonly description!: string;
-  readonly parent!: Area;
-  readonly childrens!: Area[];
-  readonly devices!: Device[];
+export class AreaDTO {
+    readonly uuid!: string;
+    readonly name!: string;
+    readonly description!: string;
+    readonly devices!: Device[];
 }

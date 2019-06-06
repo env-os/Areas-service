@@ -1,37 +1,24 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm";
-import  slugifly  from 'slugify'
+import { Entity, Column, OneToMany, PrimaryColumn } from "typeorm";
 import { Device } from "./device.entity";
 
 @Entity("Areas")
 export class Area {
-    @PrimaryGeneratedColumn("uuid")
-    public uuid!: string;
+    @PrimaryColumn('uuid')
+    public uuid: string;
 
-    @Column({ type: 'varchar', length: 150, unique: true})
+    @Column({type: 'varchar', length: 150})
     public name: string;
 
-    @Column({ type: 'varchar', length: 150, unique: true})
-    public slug: string;
-
-    @Column({ type: 'varchar', length: 150, nullable: true })
+    @Column({type: 'text' })
     public description: string;
 
-    @ManyToOne(type => Area, area => area.childrens, { onDelete: 'CASCADE' })
-    parent: Area;
-
-    @OneToMany(type => Area, area => area.parent, { onDelete: 'CASCADE' })
-    childrens: Area[];
-
     @OneToMany(type => Device, device => device.area)
-    devices: Device[];
+    public devices: Device[];
 
-    constructor(name: string, description: string, parent: Area, childrens: Area[], devices: Device[]){
+    constructor(uuid: string, name: string, description: string, devices: Device[]){
+        this.uuid = uuid;
         this.name = name;
-        this.slug = slugifly(String(this.name), { lower: true });
         this.description = description;
-        this.parent = parent;
-        this.childrens = childrens;
         this.devices = devices;
     }
-
 }

@@ -2,8 +2,7 @@ import { Service } from 'typedi';
 import { InjectRepository } from 'typeorm-typedi-extensions';
 import { AreaRepository } from '../repositories/area.repository';
 import { Area } from '../entities/area.entity';
-import { AreaDto } from '../dto/area.dto';
-import { Device } from '../entities/device.entity';
+import { AreaDTO } from '../dto/area.dto';
 
 Service()
 export class AreaService {
@@ -12,58 +11,20 @@ export class AreaService {
         private readonly areaRepository: AreaRepository,
     ) {}
 
-    public async create(areaDto: AreaDto): Promise<void> {
-        await this.areaRepository.create(new Area(
-            areaDto.name,
-            areaDto.description,
-            areaDto.parent,
-            areaDto.childrens,
-            areaDto.devices
-        ));
+    async create(areaDto: AreaDTO): Promise<void> {
+        await this.areaRepository.create(areaDto);
     }
 
-    public async delete(areaSlug: string): Promise<void> {
-        await this.areaRepository.getOneBySlug(areaSlug)
-        .then((area) => {
-            if(area != null){
-                this.areaRepository.delete(area);
-            }
-        })
+    async delete(uuid: string) {
+        await this.areaRepository.getOneByUuid(uuid)
+        .then((area) => this.areaRepository.delete(area));
     }
 
-    public async getOneBySlug(areaSlug: string): Promise<Area | undefined> {
-        return await this.areaRepository.getOneBySlug(areaSlug);
+    async getOneByUuid(uuid: string): Promise<Area> {
+        return await this.areaRepository.getOneByUuid(uuid);
     }
 
-    public async getAllRoots(): Promise<Area[]> {
-        return await this.areaRepository.getAllRoots();
+    async getAll(): Promise<Area[]> {
+        return await this.areaRepository.getAll();
     }
-
-    public async getChildrens(areaSlug: string): Promise<Area[] | undefined>  {
-        return await this.areaRepository.getOneBySlug(areaSlug)
-        .then((area) => {
-            if(area != null){
-                return area.childrens;
-            }
-        }) 
-    }
-
-    public async getParent(areaSlug: string): Promise<Area | undefined>  {
-        return await this.areaRepository.getOneBySlug(areaSlug)
-        .then((area) => {
-            if(area != null){
-                return area.parent;
-            }
-        }) 
-    }
-
-    public async getDevices(areaSlug: string): Promise<Device[] | undefined>  {
-        return await this.areaRepository.getOneBySlug(areaSlug)
-        .then((area) => {
-            if(area != null){
-                return area.devices;
-            }
-        }) 
-    }
-
 }
