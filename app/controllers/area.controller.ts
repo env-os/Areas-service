@@ -1,62 +1,51 @@
-import { Post, JsonController, Body, Get, Res, Param, Delete, Req, OnUndefined } from 'routing-controllers';
-import { AreaService } from '../services/area.service';
-import { AreaDto } from '../dto/area.dto';
-import { Area } from '../entities/area.entity';
 import { Request } from 'express'
-import { LogsUtil } from '../utils/logs.util'
-import { Device } from '../entities/device.entity';
+import { JsonController, Post, OnUndefined, Body, Req, Delete, Param, Get, BadRequestError, NotFoundError } from 'routing-controllers';
+import { AreaDTO } from '../dto/area.dto';
+import { LogsUtil } from '../utils/logs.util';
+import { Area } from '../entities/area.entity';
+import { AreaService } from '../services/area.service';
 
 
 @JsonController('/areas')
 export class AreaController {
     constructor(private readonly areaService: AreaService) {}
-
     @Post()
     @OnUndefined(201)
-    async create(@Body() areaDto: AreaDto, @Req() req: Request): Promise<void> {
+    async create(@Body() areaDto: AreaDTO, @Req() req: Request): Promise<void> {
         LogsUtil.logRequest(req);
-        await this.areaService.create(areaDto);
+        await this.areaService.create(areaDto)
+        .catch(() => {
+            throw new BadRequestError("Error during user creation.");
+        })
     }
 
-    @Delete('/:slug')
+    @Delete('/:uuid')
     @OnUndefined(201)
-    async delete(@Param('slug') slug: string, @Req() req: Request) {
+    async delete(@Param('uuid') uuid: string, @Req() req: Request) {
         LogsUtil.logRequest(req);
-        await this.areaService.delete(slug);
+        await this.areaService.delete(uuid)
+        .catch(() => {
+            throw new BadRequestError();
+        })
+    }
+
+    @Get('/:uuid')
+    @OnUndefined(404)
+    async getOneByUuid(@Param('uuid') uuid: string, @Req() req: Request): Promise<Area> {
+        LogsUtil.logRequest(req);
+        return await this.areaService.getOneByUuid(uuid)
+        .catch(() => {
+            throw new NotFoundError();
+        })
     }
 
     @Get()
     @OnUndefined(404)
-    async getAllRoots(@Req() req: Request): Promise<Area[]> {
+    async getAll(@Req() req: Request): Promise<Area[]> {
         LogsUtil.logRequest(req);
-        return await this.areaService.getAllRoots();
-    }
-
-    @Get('/:slug')
-    @OnUndefined(404)
-    async getOneBySlug(@Param('slug') slug: string, @Req() req: Request): Promise<Area | undefined> {
-        LogsUtil.logRequest(req);
-        return await this.areaService.getOneBySlug(slug);
-    }
-
-    @Get('/:slug/childrens')
-    @OnUndefined(404)
-    async getChilldrens(@Param('slug') slug: string, @Req() req: Request): Promise<Area[] | undefined> {
-        LogsUtil.logRequest(req);
-        return await this.areaService.getChildrens(slug);
-    }
-
-    @Get('/:slug/parent')
-    @OnUndefined(404)
-    async getParent(@Param('slug') slug: string, @Req() req: Request): Promise<Area | undefined> {
-        LogsUtil.logRequest(req);
-        return await this.areaService.getParent(slug);
-    }
-
-    @Get('/:slug/devices')
-    @OnUndefined(404)
-    async getDevices(@Param('slug') slug: string, @Req() req: Request): Promise<Device[] | undefined> {
-        LogsUtil.logRequest(req);
-        return await this.areaService.getDevices(slug);
+        return await this.areaService.getAll()
+        .catch(() => {
+            throw new NotFoundError();
+        })
     }
 }

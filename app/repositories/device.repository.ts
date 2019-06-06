@@ -12,9 +12,14 @@ export class DeviceRepository extends AbstractRepository<Device> {
         await this.repository.remove(device);
     }
 
-    public async getOneBySlug(slug: string): Promise<Device | undefined> {
-        return await this.repository.findOne({
-            where: {slug: slug},
-        })
+    public async getOneByUuid(uuid: string): Promise<Device> {
+        return await this.repository.findOneOrFail({
+            where: {uuid: uuid},
+            relations: ['area'],
+        });
+    }
+
+    public async getAll(): Promise<Device[]> {
+        return await this.repository.find();
     }
 }

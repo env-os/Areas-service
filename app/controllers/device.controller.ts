@@ -1,9 +1,9 @@
-import { Post, JsonController, Body, Get, Res, Param, Delete, Req, OnUndefined, Put, NotFoundError } from 'routing-controllers';
-import { Response, Request } from 'express'
+import { Request } from 'express'
+import { JsonController, Post, OnUndefined, Body, Req, Param, Delete, Get, BadRequestError, NotFoundError } from 'routing-controllers';
 import { DeviceService } from '../services/device.service'
-import { DeviceDto } from '../dto/device.dto'
+import { LogsUtil } from '../utils/logs.util';
+import { DeviceDTO } from '../dto/device.dto';
 import { Device } from '../entities/device.entity';
-import { LogsUtil } from '../utils/logs.util'
 
 
 @JsonController('/devices')
@@ -12,22 +12,41 @@ export class DeviceController {
 
     @Post()
     @OnUndefined(201)
-    async create(@Body() deviceDto: DeviceDto, @Req() req: Request, @Res() res: Response): Promise<void> {
+    async create(@Body() deviceDTO: DeviceDTO, @Req() req: Request): Promise<void> {
         LogsUtil.logRequest(req);
-        return await this.deviceService.create(deviceDto)
+        await this.deviceService.create(deviceDTO)
+        .catch(() => {
+            throw new BadRequestError();
+        })
     }
 
-    @Delete('/:slug')
+    @Delete('/:uuid')
     @OnUndefined(201)
-    async delete(@Param('slug') slug: string, @Req() req: Request, @Res() res: Response): Promise<void> {
+    async delete(@Param('uuid') uuid: string, @Req() req: Request) {
         LogsUtil.logRequest(req);
-        return await this.deviceService.delete(slug);
+        await this.deviceService.delete(uuid)
+        .catch(() => {
+            throw new BadRequestError();
+        })
     }
 
-    @Get('/:slug')
+    @Get('/:uuid')
     @OnUndefined(404)
-    async getOneBySlug(@Param('slug') slug: string, @Req() req: Request): Promise<Device | undefined> {
+    async getOneByUuid(@Param('uuid') uuid: string, @Req() req: Request): Promise<Device> {
         LogsUtil.logRequest(req);
-        return await this.deviceService.getOneBySlug(slug);
+        return await this.deviceService.getOneByUuid(uuid)
+        .catch(() => {
+            throw new NotFoundError();
+        })
+    }
+
+    @Get()
+    @OnUndefined(404)
+    async getAll(@Req() req: Request): Promise<Device[]> {
+        LogsUtil.logRequest(req);
+        return await this.deviceService.getAll()
+        .catch(() => {
+            throw new NotFoundError();
+        })
     }
 }

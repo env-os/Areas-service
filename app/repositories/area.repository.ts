@@ -12,29 +12,14 @@ export class AreaRepository extends AbstractRepository<Area> {
         await this.repository.remove(area);
     }
 
-    public async getOneBySlug(slug: string): Promise<Area | undefined> {
-        return await this.repository.findOne({
-            where: {slug: slug},
-            join: {
-                alias: "area",
-                leftJoinAndSelect: {
-                    childrens: "area.childrens",
-                    parent: "area.parent",
-                    device: "area.devices"
-                }
-            },
-        })
+    public async getOneByUuid(uuid: string): Promise<Area> {
+        return await this.repository.findOneOrFail({
+            where: {uuid: uuid},
+            relations: ['devices']
+        });
     }
 
-    public async getAllRoots(): Promise<Area[]> {
-        return await this.repository.find({
-            where: {parent: null},
-            join: {
-                alias: "area",
-                leftJoinAndSelect: {
-                    childrens: "area.childrens",
-                }
-            },
-        })
+    public async getAll(): Promise<Area[]> {
+        return await this.repository.find();
     }
 }

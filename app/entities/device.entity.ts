@@ -1,20 +1,16 @@
-import {Entity, ManyToOne, PrimaryGeneratedColumn, Column} from "typeorm";
+import {Entity, ManyToOne, PrimaryColumn } from "typeorm";
 import {Area} from "./area.entity";
 
 @Entity("Devices")
 export class Device {
-
-    @PrimaryGeneratedColumn("uuid")
-    public uuid!: string;
-
-    @Column({ unique: true})
-    public slug: string;
+    @PrimaryColumn('uuid')
+    public uuid: string;
 
     @ManyToOne(type => Area, areas => areas.devices, {nullable: false, onDelete: "CASCADE"})
-    area: Area;
+    public area: Area;
 
-    constructor(slug: string, area: Area){
-        this.slug = slug;
+    constructor(uuid: string, area: Area){
+        this.uuid = uuid;
         this.area = area;
     }
 }
