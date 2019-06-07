@@ -9,7 +9,7 @@ export class Area {
     @Column({type: 'varchar', length: 150})
     public name: string;
 
-    @Column({type: 'text' })
+    @Column({type: 'text', nullable: true })
     public description: string;
 
     @OneToMany(type => Device, device => device.area)
