@@ -1,0 +1,169 @@
+swagger: "2.0"
+info:
+  description: "Microservice che si occupa della gestione delle aree [https://github.com/env-os/areas-service]"
+  version: "1.0.0"
+  title: "areas-service"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:3000"
+paths:
+  /areas:
+    post:
+      summary: "Aggiunge un nuova area all'interno del sistema"
+      description: "Questa chiamata POST consente di creare una nuova area all'interno del database."
+      operationId: "createArea"
+      consumes:
+      - "application/json"
+      parameters: 
+      - in: "body"
+        name: "body"
+        description: "Aggiungere area all'interno di un database."
+        required: true
+        schema:
+          $ref: '#/definitions/Areas'
+      responses:
+        201:
+          description: Created
+        400:
+          description: "L'area non è stata creata"
+    get:
+      summary: "Ricava le informazioni di tutte le aree"
+      description: ""
+      operationId: "getAllAreas"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Areas'
+        404:
+          description: "All'interno del database non ci sono aree"
+  
+  /areas/{uuid}:
+    get:
+      summary: "Ricava tutte le informazioni dell'area passando il suo l'uuid"
+      description: ""
+      operationId: "getAreaByUuid"
+      parameters: 
+      - name: "uuid"
+        in: "path"
+        description: "uuid dell'area che si vuole visualizzare"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Areas'
+            
+    delete: 
+      summary: "Elimina un area dal database passando il suo uuid"
+      description: ""
+      operationId: "deleteArea"
+      parameters: 
+      - name: "uuid"
+        in: "path"
+        description: "l'uuid dell'area che si vuole eliminare"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: OK
+        404:
+          description: "L'area inserita non esiste"
+          
+  /devices:
+    post:
+      summary: "Aggiunge un nuovo dispositivo all'interno del microservizio"
+      description: "Questa chiamata POST consente di creare una nuovo dispositivo all'interno del database."
+      operationId: "createDevice"
+      consumes:
+      - "application/json"
+      parameters: 
+      - in: "body"
+        name: "body"
+        description: "Aggiungere dispositivo all'interno di un database."
+        required: true
+        schema:
+          $ref: '#/definitions/Devices'
+      responses:
+        201:
+          description: Created
+        400:
+          description: "Il dispositivo non è stata creato"
+    
+    get:
+      summary: "Ricava le informazioni di tutti i dispositivi"
+      description: ""
+      operationId: "getAllDevice"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Devices'
+        404:
+          description: "All'interno del database non ci sono dispositivi"
+  
+  /devices/{uuid}:
+    get:
+      summary: "Ricava tutte le informazioni del dispositivo passando il suo l'uuid"
+      description: ""
+      operationId: "getDeviceByUuid"
+      parameters: 
+      - name: "uuid"
+        in: "path"
+        description: "uuid del dispositivo che si vuole visualizzare"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Devices'
+            
+    delete: 
+      summary: "Elimina un dispositivo dal database passando il suo uuid"
+      description: ""
+      operationId: "deleteDevice"
+      parameters: 
+      - name: "uuid"
+        in: "path"
+        description: "l'uuid del dispositivo che si vuole eliminare"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: OK
+        404:
+          description: "Il dispositivo inserito non esiste"
+    
+          
+
+definitions:
+  Areas:
+    type: object
+    properties:
+      uuid:
+        type: string
+        format: string
+      name:
+        type: string
+        format: string
+      description:
+        type: string
+        format: string
+      devices:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/Devices'
+  
+  Devices:
+    type: object
+    properties:
+      uuid:
+        type: string
+        format: string
+      area:
+        type: object
+        $ref: '#/definitions/Areas'
