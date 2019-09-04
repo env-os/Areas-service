@@ -15,7 +15,7 @@ export class AreaController {
         LogsUtil.logRequest(req);
         await this.areaService.create(areaDto)
         .catch(() => {
-            throw new BadRequestError("Error during user creation.");
+            throw new BadRequestError("Error during area creation.");
         })
     }
 
