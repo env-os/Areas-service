@@ -11,13 +11,13 @@ export class DeviceService {
         private readonly deviceRepository: DeviceRepository,
     ) {}
 
-    async create(areaDto: DeviceDTO): Promise<void> {
-        await this.deviceRepository.create(areaDto);
+    async create(deviceDto: DeviceDTO): Promise<void> {
+        await this.deviceRepository.create(deviceDto);
     }
 
     async delete(uuid: string) {
         await this.deviceRepository.getOneByUuid(uuid)
-        .then((area) => this.deviceRepository.delete(area));
+        .then((device) => this.deviceRepository.delete(device));
     }
 
     async getOneByUuid(uuid: string): Promise<Device> {

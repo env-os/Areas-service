@@ -9,7 +9,7 @@ import { DeviceController } from './controllers/device.controller';
 typeormUseContainer(Container)
 routingUseContainer(Container)
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3002;
 
 const app = createExpressServer({
     controllers: [
